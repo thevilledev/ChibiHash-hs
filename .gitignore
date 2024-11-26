@@ -1,0 +1,45 @@
+# Haskell builds
+dist
+dist-*
+cabal-dev
+*.o
+*.hi
+*.hie
+*.chi
+*.chs.h
+*.dyn_o
+*.dyn_hi
+.hpc
+.hsenv
+.cabal-sandbox/
+cabal.sandbox.config
+*.prof
+*.aux
+*.hp
+*.eventlog
+
+# Stack
+.stack-work/
+stack.yaml.lock
+
+# Cabal
+cabal.project.local
+cabal.project.local~
+.HTF/
+
+# IDE/Editor files
+.idea/
+.vscode/
+*.swp
+*~
+
+# Mac OS specific
+.DS_Store
+
+# Build outputs
+out/
+build/
+
+# Local environment
+.env
+.envrc
