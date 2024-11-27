@@ -21,6 +21,8 @@ main = do
     print $ chibihash64 input seed
 ```
 
+You may also run the example program with `cabal run`.
+
 ## Tests
 
 Run tests with `cabal test`.

@@ -63,7 +63,6 @@ chibihash64 input seed = finalMix x
     -- Initial state
     h0 = [p1, p2, p3, seed]
 
-
     -- Process full 32-byte blocks
     (h1, remaining) = processBlocks bytes h0
 
