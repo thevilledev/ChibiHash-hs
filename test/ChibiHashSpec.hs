@@ -2,7 +2,6 @@ module ChibiHashSpec (spec) where
 
 import Test.Hspec
 import ChibiHash (chibihash64)
-import qualified Data.ByteString as BS
 import Data.ByteString.Char8 (pack)
 
 spec :: Spec
@@ -19,12 +18,9 @@ spec = describe "ChibiHash" $ do
             chibihash64 (pack "Hello, world!") 0 `shouldBe` 0x5AF920D8C0EBFE9F
 
         it "handles exactly 32-byte string" $ do
-            chibihash64 (pack "qwertyuiopasdfghjklzxcvbnm123456") 0 
+            chibihash64 (pack "qwertyuiopasdfghjklzxcvbnm123456") 0
                 `shouldBe` 0x2EF296DB634F6551
 
         it "handles string longer than 32 bytes" $ do
-            chibihash64 (pack "qwertyuiopasdfghjklzxcvbnm123456789") 0 
+            chibihash64 (pack "qwertyuiopasdfghjklzxcvbnm123456789") 0
                 `shouldBe` 0x0F56CF3735FFA943
-
-main :: IO ()
-main = hspec spec
