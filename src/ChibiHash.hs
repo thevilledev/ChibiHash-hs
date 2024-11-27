@@ -9,7 +9,7 @@ Portability : portable
 
 ChibiHash is a simple and fast 64-bit hash function suitable for hash tables and
 hash-based data structures. This is a Haskell port of the original implementation
-by N-R-K (https://github.com/N-R-K/ChibiHash).
+by [N-R-K](https://github.com/N-R-K) at [https://github.com/N-R-K/ChibiHash](https://github.com/N-R-K/ChibiHash).
 
 Example usage:
 
