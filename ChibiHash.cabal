@@ -1,5 +1,5 @@
 name:                ChibiHash
-version:             0.1.0.0
+version:             0.2.0.0
 synopsis:            a simple and fast 64-bit hash function
 description:         Haskell port of ChibiHash, a simple and fast 64-bit hash function.
                     .
@@ -33,6 +33,8 @@ source-repository head
 
 library
   exposed-modules:     ChibiHash
+                      , ChibiHash.V1
+                      , ChibiHash.V2
   hs-source-dirs:      src
   build-depends:       base         >= 4.7 && < 5
                      , bytestring   >= 0.10 && < 0.13
