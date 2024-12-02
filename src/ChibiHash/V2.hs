@@ -5,13 +5,13 @@
     - Good distribution of hash values
     - Simple implementation with no lookup tables
 
-    Version 2 improvements over V1:
-    - Better seeding that affects all 256 bits of internal state
-    - Improved mixing in bulk data processing
-    - Optimized tail-end handling for short inputs
-    - Passes all SMHasher3 test suite requirements
+    Version 2 improvements over V1, from the original C implementation:
 
-    Rust port of the original C implementation by N-R-K at https://github.com/N-R-K/ChibiHash
+    - Faster performance on short strings (42 cycles/hash vs 34 cycles/hash)
+    - Improved seeding that affects all 256 bits of internal state
+    - Better mixing in bulk data processing
+    - Passes all 252 tests in smhasher3 (commit 34093a3), v1 failed 3.
+
 -}
 module ChibiHash.V2
     ( chibihash64

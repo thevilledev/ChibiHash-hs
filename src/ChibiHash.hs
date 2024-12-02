@@ -38,11 +38,14 @@ import qualified ChibiHash.V2 as V2
 import Data.ByteString (ByteString)
 import Data.Word (Word64)
 
+-- | Hash a ByteString with the default (V1) implementation
 chibihash64 :: ByteString -> Word64 -> Word64
 chibihash64 = V1.chibihash64
 
+-- | Hash a ByteString with the V1 implementation
 chibihash64V1 :: ByteString -> Word64 -> Word64
 chibihash64V1 = V1.chibihash64
 
+-- | Hash a ByteString with the V2 implementation
 chibihash64V2 :: ByteString -> Word64 -> Word64
 chibihash64V2 = V2.chibihash64
