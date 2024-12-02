@@ -7,6 +7,7 @@ description:         Haskell port of ChibiHash, a simple and fast 64-bit hash fu
                     .
                     * Fast 64-bit hashing
                     * Suitable for hash tables and hash-based data structures
+                    * Supports both V1 and V2 implementations
                     .
                     For more information, see the article "ChibiHash: A small, fast 64-bit hash function"
                     at https://nrk.neocities.org/articles/chibihash
