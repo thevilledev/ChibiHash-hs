@@ -9,23 +9,23 @@ All credit for the algorithm goes to [N-R-K](https://github.com/N-R-K).
 ## Usage 
 
 ```haskell
-module Main where
+module Main (main) where
 
 import ChibiHash (chibihash64)
-import qualified Data.ByteString as BS
+import qualified Data.ByteString.Char8 as C8
 
 main :: IO ()
 main = do
-    let input = BS.pack [1,2,3,4]
-    let seed = 0
-    print $ chibihash64 input seed
+    let text = "Hello, ChibiHash!"
+    putStrLn $ "Input text: " ++ show text
+    putStrLn $ "Hash (seed 0): " ++ show (chibihash64 (C8.pack text) 0)
 ```
 
 You may also run the example program with `cabal run`.
 
 ## Tests
 
-Run tests with `cabal test`.
+Run tests with `cabal test`. Both v1 and v2 are tested.
 
 ## License
 
