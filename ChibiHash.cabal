@@ -30,7 +30,7 @@ tested-with:         GHC == 9.4.7
 source-repository head
   type:     git
   location: https://github.com/thevilledev/ChibiHash-hs.git
-  tag:      v0.1.0.0
+  tag:      v0.2.0.0
 
 library
   exposed-modules:     ChibiHash
