@@ -57,21 +57,21 @@ chibihash64 :: ByteString -> Word64 -> Word64
 chibihash64 input seed = 
     let bytes = BS.unpack input
         len = fromIntegral (BS.length input) :: Word64
-        
+
         -- Initialize state with seed-dependent values
         seed2 = ((seed `ChibiHash.V2.subtract` k) `rotateL` 15) `add` 
                 ((seed `ChibiHash.V2.subtract` k) `rotateL` 47)
-        
+
         h0 = [ seed
              , seed `add` k
              , seed2
              , seed2 `add` ((k `mul` k) `xor` k)
              ]
-        
+
         -- Process input in stages
         (h1, remaining) = processBlocks bytes h0  -- Process 32-byte blocks
         h2 = processRemaining remaining (length remaining) h1  -- Handle remaining bytes
-        
+
     in case h2 of
         [ha, hb, hc, hd] -> 
             let -- Final mixing steps
@@ -80,7 +80,7 @@ chibihash64 input seed =
                 h_final_0' = h_final_0 `mul` k
                 h_final_0'' = h_final_0' `xor` (h_final_0' `shiftR` 31)
                 h_final_1' = h_final_1 `add` h_final_0''
-                
+
                 -- Length-dependent mixing
                 x = len `mul` k
                 x' = x `xor` (x `rotateL` 29)

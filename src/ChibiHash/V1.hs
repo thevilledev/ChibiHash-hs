@@ -1,6 +1,7 @@
 {-| V1 implementation of ChibiHash
 
     This is a 64-bit non-cryptographic hash function optimized for:
+
     - Fast performance on short strings
     - Good distribution of hash values
     - Simple implementation with no lookup tables
