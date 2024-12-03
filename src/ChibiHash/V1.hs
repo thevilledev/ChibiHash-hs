@@ -100,9 +100,10 @@ processRemaining bytes len _state@[a, b, c, d] =
         ha' = a + ((fromIntegral len `shiftL` 32) .|. (fromIntegral len `shiftR` 32))
 
         -- Handle single byte if length is odd
-        (ha'', bytes', len') = if not (null bytes) && (length bytes .&. 1) == 1
-            then (ha' `xor` fromIntegral (head bytes), tail bytes, length bytes - 1)
-            else (ha', bytes, length bytes)
+        (ha'', bytes', len') = case bytes of
+            (firstByte:bs) | length bytes .&. 1 == 1 ->
+                (ha' `xor` fromIntegral firstByte, bs, length bytes - 1)
+            _ -> (ha', bytes, length bytes)
 
         -- Multiply and shift h[0]
         ha''' = ha'' * p2
@@ -131,16 +132,16 @@ process8ByteChunks bs i h
 
 -- | Process remaining 2-byte chunks
 process2ByteChunks :: [Word8] -> Int -> [Word64] -> [Word64]
-process2ByteChunks bs i h
-    | length bs >= 2 =
-        let v = fromIntegral (head bs) .|. (fromIntegral (bs !! 1) `shiftL` 8)
-            hi = h !! i
-            hi' = hi `xor` v
-            hi'' = hi' * p3
-            hi''' = hi'' `xor` (hi'' `shiftR` 31)
-            h' = take i h ++ [hi'''] ++ drop (i + 1) h
-        in process2ByteChunks (drop 2 bs) ((i + 1) .&. 3) h'
-    | otherwise = h
+process2ByteChunks [] _ h = h
+process2ByteChunks [_] _ h = h  -- Single byte remaining, ignore it
+process2ByteChunks (b1:b2:rest) i h =
+    let v = fromIntegral b1 .|. (fromIntegral b2 `shiftL` 8)
+        hi = h !! i
+        hi' = hi `xor` v
+        hi'' = hi' * p3
+        hi''' = hi'' `xor` (hi'' `shiftR` 31)
+        h' = take i h ++ [hi'''] ++ drop (i + 1) h
+    in process2ByteChunks rest ((i + 1) .&. 3) h'
 
 -- | Final mixing function to improve avalanche effect
 -- Applies a series of xor, shift, and multiply operations

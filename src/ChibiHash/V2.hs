@@ -37,12 +37,13 @@ load64le bytes =
 -- | Convert bytes to Word32 using little-endian ordering
 -- Takes 4 bytes and combines them into the lower 32 bits of a Word64
 load32le :: [Word8] -> Word64
-load32le bytes = 
-    let b0 = fromIntegral (head bytes)
-        b1 = fromIntegral (bytes !! 1) `shiftL` 8
-        b2 = fromIntegral (bytes !! 2) `shiftL` 16
-        b3 = fromIntegral (bytes !! 3) `shiftL` 24
-    in b0 .|. b1 .|. b2 .|. b3
+load32le (b0:b1:b2:b3:_) = 
+    let w0 = fromIntegral b0
+        w1 = fromIntegral b1 `shiftL` 8
+        w2 = fromIntegral b2 `shiftL` 16
+        w3 = fromIntegral b3 `shiftL` 24
+    in w0 .|. w1 .|. w2 .|. w3
+load32le _ = error "load32le: insufficient bytes"
 
 -- | Basic arithmetic operations used throughout the hash function
 add, subtract, mul :: Word64 -> Word64 -> Word64
@@ -108,16 +109,16 @@ processBlocks input h
 -- | Process an 8-byte stripe within a block
 -- Updates the 4-element state array based on stripe index
 processStripe :: ([Word64], Int, [Word8]) -> [Word64]
-processStripe (state, i, stripe) | i >= 0 && i < 4 =
+processStripe (state@(s0:s1:s2:s3:_), i, stripe) | i >= 0 && i < 4 =
     let v = load64le stripe
         hi' = (v `add` (state !! i)) `mul` k
         nextIdx = (i + 1) .&. 3
         next = (state !! nextIdx) `add` (v `rotateL` 27)
     in case i of
-        0 -> [hi', next, state !! 2, state !! 3]
-        1 -> [head state, hi', next, state !! 3]
-        2 -> [head state, state !! 1, hi', next]
-        3 -> [next, state !! 1, state !! 2, hi']
+        0 -> [hi', next, s2, s3]
+        1 -> [s0, hi', next, s3]
+        2 -> [s0, s1, hi', next]
+        3 -> [next, s1, s2, hi']
         _ -> error "Invalid index"
 processStripe _ = error "Invalid state: expected 4 hash values"
 
@@ -141,11 +142,14 @@ processRemaining bytes len state@[ha, hb, hc, hd]
             hd' = hd `xor` load32le (drop (len - 4) bytes)
         in [ha, hb, hc', hd']
     | len > 0 = 
-        let hc' = hc `xor` fromIntegral (head bytes)
-            mid_byte = fromIntegral (bytes !! (len `div` 2))
-            last_byte = fromIntegral (last bytes) `shiftL` 8
-            hd' = hd `xor` (mid_byte .|. last_byte)
-        in [ha, hb, hc', hd']
+        case bytes of
+            (b:_rest) ->
+                let hc' = hc `xor` fromIntegral b
+                    mid_byte = fromIntegral (bytes !! (len `div` 2))
+                    last_byte = fromIntegral (last bytes) `shiftL` 8
+                    hd' = hd `xor` (mid_byte .|. last_byte)
+                in [ha, hb, hc', hd']
+            [] -> state  -- This case should never happen since len > 0
     | otherwise = state
 processRemaining _ _ _ = error "Invalid state"
 
